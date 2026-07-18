@@ -1,0 +1,7 @@
+# Pracovní složka — původní fotky, videa, náhledy. Nepatří do repozitáře.
+_work/
+
+# Systémové smetí
+Thumbs.db
+desktop.ini
+.DS_Store
