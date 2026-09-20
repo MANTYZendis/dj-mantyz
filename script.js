@@ -8,22 +8,6 @@
    a taky u odkazu "E-mail" v index.html. */
 const MUJ_EMAIL = "info@djmantyz.cz";
 
-/* --- ODESÍLÁNÍ FORMULÁŘE ---
-   Poptávka jde přes FormSubmit. Proti Web3Forms umí zdarma poslat
-   zákazníkovi potvrzení, že jeho zpráva dorazila — a o to nám jde:
-   kdo vyplní formulář a nedostane nic, neví, jestli se to vůbec odeslalo.
-
-   POZOR — jednorázová aktivace: po úplně prvním odeslání přijde na
-   KAM_CHODI_POPTAVKY e-mail od FormSubmit s odkazem, na který je potřeba
-   kliknout. Do té doby se poptávky nedoručují. Po aktivaci FormSubmit
-   nabídne náhradní řetězec místo adresy — až ho budeš mít, přepiš ho sem
-   místo e-mailu, ať adresa nesvítí přímo v kódu stránky.
-
-   Nezávislé na hostingu: je to obyčejné volání ze stránky, takže po
-   stěhování webu na vlastní server se nemusí měnit nic. */
-const KAM_CHODI_POPTAVKY = "mantyz.djwork@gmail.com";
-
-
 /* ---------- Mobilní menu ---------- */
 function prepniMenu() {
   const hlavicka = document.querySelector(".hdr-in");
@@ -46,90 +30,6 @@ document.querySelectorAll(".nav a").forEach(function (odkaz) {
   odkaz.addEventListener("click", zavriMenu);
 });
 
-
-/* ---------- Odeslání poptávky ---------- */
-function odeslatPoptavku(udalost) {
-  udalost.preventDefault();
-
-  const hodnota = (id) => (document.getElementById(id)?.value || "").trim();
-
-  // Past na roboty: políčko je schované, člověk ho nevyplní.
-  if (hodnota("web")) return;
-
-  const jmeno  = hodnota("jmeno");
-  const datum  = hodnota("datum");
-  const misto  = hodnota("misto");
-  const typ    = hodnota("typ");
-  const email  = hodnota("email");
-  const telefon = hodnota("telefon");
-  const zprava = hodnota("zprava");
-
-  const predmet = `Poptávka: ${typ}${datum ? " — " + naDatum(datum) : ""}`;
-
-  const telo = [
-    `Jméno: ${jmeno}`,
-    `E-mail: ${email || "neuveden"}`,
-    `Telefon: ${telefon || "neuveden"}`,
-    `Typ akce: ${typ}`,
-    `Datum: ${datum ? naDatum(datum) : "neuvedeno"}`,
-    `Místo: ${misto || "neuvedeno"}`,
-    "",
-    zprava || "(bez zprávy)",
-  ].join("\n");
-
-  if (KAM_CHODI_POPTAVKY) {
-    odeslatNaServer(predmet, telo, jmeno, email);
-  } else {
-    otevritPostu(predmet, telo);
-  }
-}
-
-/* Odešle poptávku na pozadí — návštěvník nemusí mít nastavený e-mail.
-   Zároveň si o odeslání řekne zákazníkovi do jeho schránky. */
-function odeslatNaServer(predmet, telo, jmeno, email) {
-  const tlacitko = document.querySelector(".form button[type=submit]");
-  if (tlacitko) { tlacitko.disabled = true; tlacitko.textContent = "Odesílám…"; }
-
-  const potvrzeni =
-    "Dobrý den,\n\n" +
-    "vaše poptávka mi dorazila, díky za ni. Ozvu se vám do 24 hodin " +
-    "s konkrétní nabídkou.\n\n" +
-    "Tohle je automatické potvrzení, že se formulář opravdu odeslal — " +
-    "odpovídat na něj nemusíte. Kdyby něco hořelo, volejte rovnou " +
-    "na +420 704 794 222.\n\n" +
-    "Co jsem od vás dostal:\n" + telo + "\n\n" +
-    "Matěj — DJ MANTYZ\n" +
-    "https://djmantyz.cz";
-
-  fetch("https://formsubmit.co/ajax/" + encodeURIComponent(KAM_CHODI_POPTAVKY), {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({
-      _subject: predmet,
-      _captcha: "false",
-      _template: "table",
-      _autoresponse: potvrzeni,     // tohle dostane zákazník do své schránky
-      name: jmeno || "Poptávka z webu",
-      email: email,                 // adresa, na kterou jde potvrzení
-      message: telo,
-    }),
-  })
-    .then((odpoved) => odpoved.json())
-    .then((data) => {
-      const ok = data.success === true || data.success === "true";
-      if (!ok) throw new Error(data.message || "nepodařilo se odeslat");
-      hlaska("Poptávka odešla. Potvrzení máte v e-mailu, ozvu se do 24 hodin.", "ok");
-      document.querySelector(".form")?.reset();
-      if (tlacitko) tlacitko.textContent = "Odesláno";
-    })
-    .catch(() => {
-      // Když se odeslání nepovede, návštěvník o poptávku nepřijde —
-      // otevře se mu pošta s připravenou zprávou.
-      hlaska("Odeslání se nepovedlo, otevírám e-mail. Nebo mi rovnou zavolejte.", "chyba");
-      if (tlacitko) { tlacitko.disabled = false; tlacitko.textContent = "Odeslat poptávku"; }
-      otevritPostu(predmet, telo);
-    });
-}
 
 /* ---------- Nabídka, kam napsat e-mail ----------
    Dřív se rovnou spouštěl odkaz mailto:. Jenže komu v počítači není
@@ -196,20 +96,6 @@ function mailtoOdkaz(predmet, telo) {
     document.getElementById(id)?.addEventListener("click", () => setTimeout(zavri, 100));
   });
 })();
-
-function hlaska(text, druh) {
-  const misto = document.getElementById("stav-formulare");
-  if (!misto) return;
-  misto.textContent = text;
-  misto.className = "form-stav " + (druh === "ok" ? "form-stav-ok" : "form-stav-chyba");
-}
-
-/* Z 2026-08-15 udělá 15. 8. 2026 */
-function naDatum(iso) {
-  const [r, m, d] = iso.split("-");
-  return `${Number(d)}. ${Number(m)}. ${r}`;
-}
-
 
 /* ---------- Prohlížeč fotek ----------
    Kliknutí na fotku v galerii ji otevře přes celou obrazovku.

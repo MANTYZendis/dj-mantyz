@@ -330,11 +330,6 @@ a{color:inherit}
 .faq details p{margin:0;padding:0 22px 20px;color:var(--text-2);font-size:.97rem}
 
 /* ---------- FORMULÁŘ — stav odeslání a past na roboty ---------- */
-.past{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-.form-stav{margin:0;text-align:center;font-size:.93rem;font-weight:700;min-height:0}
-.form-stav:empty{display:none}
-.form-stav-ok{color:var(--akcent)}
-.form-stav-chyba{color:#e88b7d}
 
 /* ---------- NÁHRADNÍ CESTY K E-MAILU ---------- */
 .posta[hidden]{display:none}
