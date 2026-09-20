@@ -127,3 +127,77 @@ function naDatum(iso) {
   const [r, m, d] = iso.split("-");
   return `${Number(d)}. ${Number(m)}. ${r}`;
 }
+
+
+/* ---------- Prohlížeč fotek ----------
+   Kliknutí na fotku v galerii ji otevře přes celou obrazovku.
+   Zavírá se křížkem, klávesou Esc nebo kliknutím vedle fotky,
+   přepíná se šipkami, tlačítky nebo švihnutím prstem. */
+(function () {
+  const lupa = document.getElementById("lupa");
+  const obrazek = document.getElementById("lupa-foto");
+  const popis = document.getElementById("lupa-popis");
+  const fotky = Array.from(document.querySelectorAll(".galerie .foto img"));
+  if (!lupa || !obrazek || !fotky.length) return;
+
+  let kde = 0;
+
+  function ukaz(index) {
+    kde = (index + fotky.length) % fotky.length;
+    const f = fotky[kde];
+    obrazek.src = f.currentSrc || f.src;
+    obrazek.alt = f.alt || "";
+    if (popis) popis.textContent = f.alt || "";
+  }
+
+  function otevri(index) {
+    ukaz(index);
+    lupa.hidden = false;
+    document.body.style.overflow = "hidden";   // stránka pod tím se nemá posouvat
+    lupa.querySelector(".lupa-zavrit")?.focus();
+  }
+
+  function zavri() {
+    lupa.hidden = true;
+    document.body.style.overflow = "";
+    obrazek.src = "";
+  }
+
+  fotky.forEach(function (f, i) {
+    const ramecek = f.closest(".foto");
+    if (!ramecek) return;
+    ramecek.tabIndex = 0;
+    ramecek.setAttribute("role", "button");
+    ramecek.setAttribute("aria-label", "Zvětšit fotku: " + (f.alt || ""));
+    ramecek.addEventListener("click", () => otevri(i));
+    ramecek.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); otevri(i); }
+    });
+  });
+
+  lupa.querySelector(".lupa-zavrit")?.addEventListener("click", zavri);
+  lupa.querySelector(".lupa-zpet")?.addEventListener("click", () => ukaz(kde - 1));
+  lupa.querySelector(".lupa-dal")?.addEventListener("click", () => ukaz(kde + 1));
+
+  // Kliknutí do tmavé plochy vedle fotky zavírá.
+  lupa.addEventListener("click", function (e) {
+    if (e.target === lupa) zavri();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (lupa.hidden) return;
+    if (e.key === "Escape") zavri();
+    if (e.key === "ArrowLeft") ukaz(kde - 1);
+    if (e.key === "ArrowRight") ukaz(kde + 1);
+  });
+
+  // Švihnutí prstem na mobilu.
+  let zacatekX = null;
+  lupa.addEventListener("touchstart", (e) => { zacatekX = e.changedTouches[0].clientX; }, { passive: true });
+  lupa.addEventListener("touchend", function (e) {
+    if (zacatekX === null) return;
+    const posun = e.changedTouches[0].clientX - zacatekX;
+    if (Math.abs(posun) > 50) ukaz(kde + (posun < 0 ? 1 : -1));
+    zacatekX = null;
+  }, { passive: true });
+})();

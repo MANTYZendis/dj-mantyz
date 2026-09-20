@@ -164,10 +164,51 @@ a{color:inherit}
 .foto{margin:0 0 14px;border-radius:var(--radius);overflow:hidden;background:var(--panel);
   border:1px solid var(--linka);break-inside:avoid}
 .foto img{display:block;width:100%;height:auto;transition:transform .4s}
-/* Mensi zaber — pro fotky, ktere maji slabsi kvalitu nez zbytek galerie. */
-.foto-mala{width:74%;margin-left:auto}
-@media (max-width:560px){ .foto-mala{width:100%} }
+.foto{cursor:zoom-in}
+.foto img{pointer-events:none}
 .foto:hover img{transform:scale(1.04)}
+
+/* ---------- PROHLÍŽEČ FOTEK ---------- */
+.lupa[hidden]{display:none}   /* jinak by trida display:flex prebila atribut hidden */
+.lupa{
+  position:fixed;inset:0;z-index:100;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(6,7,10,.94);
+  padding:24px;
+  animation:lupa-nabeh .18s ease-out;
+}
+@keyframes lupa-nabeh{from{opacity:0}to{opacity:1}}
+.lupa-foto{
+  max-width:min(1100px,92vw);max-height:84vh;
+  width:auto;height:auto;border-radius:10px;
+  box-shadow:0 24px 60px rgba(0,0,0,.6);
+}
+.lupa-popis{
+  position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+  margin:0;max-width:min(760px,88vw);text-align:center;
+  color:var(--text-2);font-size:.9rem;line-height:1.45;
+}
+.lupa-zavrit,.lupa-sip{
+  position:absolute;z-index:1;
+  background:rgba(255,255,255,.08);border:1px solid var(--linka);
+  color:var(--text);border-radius:99px;cursor:pointer;
+  font-family:inherit;line-height:1;
+  transition:background .2s,border-color .2s;
+}
+.lupa-zavrit:hover,.lupa-sip:hover{background:rgba(255,255,255,.16);border-color:var(--text-3)}
+.lupa-zavrit{top:18px;right:18px;width:46px;height:46px;font-size:1.7rem}
+.lupa-sip{top:50%;transform:translateY(-50%);width:52px;height:52px;font-size:2rem}
+.lupa-zpet{left:18px}
+.lupa-dal{right:18px}
+
+@media (max-width:640px){
+  .lupa{padding:12px}
+  .lupa-foto{max-height:74vh}
+  .lupa-sip{width:44px;height:44px;font-size:1.6rem}
+  .lupa-zpet{left:8px}
+  .lupa-dal{right:8px}
+  .lupa-popis{bottom:14px;font-size:.84rem}
+}
 
 /* ---------- FORMULÁŘ ---------- */
 .form{display:flex;flex-direction:column;gap:16px;margin:34px 0 40px}
