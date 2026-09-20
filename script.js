@@ -131,11 +131,71 @@ function odeslatNaServer(predmet, telo, jmeno, email) {
     });
 }
 
-/* Záloha: otevře poštovní program s předvyplněnou zprávou. */
+/* ---------- Nabídka, kam napsat e-mail ----------
+   Dřív se rovnou spouštěl odkaz mailto:. Jenže komu v počítači není
+   nastavený poštovní program (a to je většina lidí, co píšou přes
+   webový Gmail), tomu kliknutí neudělalo vůbec nic. Proto se teď
+   otevře nabídka a člověk si vybere — každá volba někam vede. */
 function otevritPostu(predmet, telo) {
-  window.location.href =
-    `mailto:${MUJ_EMAIL}?subject=${encodeURIComponent(predmet)}&body=${encodeURIComponent(telo)}`;
+  const panel = document.getElementById("posta");
+  if (!panel) {                       // kdyby panel v kódu chyběl
+    window.location.href = mailtoOdkaz(predmet, telo);
+    return;
+  }
+
+  const q = (id) => document.getElementById(id);
+  const adr = encodeURIComponent(MUJ_EMAIL);
+  const pre = encodeURIComponent(predmet);
+  const tel = encodeURIComponent(telo);
+
+  if (q("posta-gmail"))
+    q("posta-gmail").href =
+      `https://mail.google.com/mail/?view=cm&fs=1&to=${adr}&su=${pre}&body=${tel}`;
+  if (q("posta-outlook"))
+    q("posta-outlook").href =
+      `https://outlook.live.com/mail/0/deeplink/compose?to=${adr}&subject=${pre}&body=${tel}`;
+  if (q("posta-seznam"))
+    q("posta-seznam").href =
+      `https://email.seznam.cz/newMessageScreen?to=${adr}&subject=${pre}&body=${tel}`;
+  if (q("posta-program"))
+    q("posta-program").href = mailtoOdkaz(predmet, telo);
+
+  const kop = q("posta-kopirovat");
+  if (kop) {
+    kop.textContent = "Jen zkopírovat adresu";
+    kop.onclick = function () {
+      if (!navigator.clipboard) return;
+      navigator.clipboard.writeText(MUJ_EMAIL)
+        .then(() => { kop.textContent = "Zkopírováno: " + MUJ_EMAIL; })
+        .catch(() => {});
+    };
+  }
+
+  panel.hidden = false;
+  document.body.style.overflow = "hidden";
+  q("posta-zavrit")?.focus();
 }
+
+function mailtoOdkaz(predmet, telo) {
+  return `mailto:${MUJ_EMAIL}?subject=${encodeURIComponent(predmet)}` +
+         (telo ? `&body=${encodeURIComponent(telo)}` : "");
+}
+
+(function () {
+  const panel = document.getElementById("posta");
+  if (!panel) return;
+  const zavri = () => { panel.hidden = true; document.body.style.overflow = ""; };
+
+  document.getElementById("posta-zavrit")?.addEventListener("click", zavri);
+  panel.addEventListener("click", (e) => { if (e.target === panel) zavri(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !panel.hidden) zavri();
+  });
+  // Po výběru se nabídka zavře sama.
+  ["posta-gmail", "posta-outlook", "posta-seznam", "posta-program"].forEach(function (id) {
+    document.getElementById(id)?.addEventListener("click", () => setTimeout(zavri, 100));
+  });
+})();
 
 function hlaska(text, druh) {
   const misto = document.getElementById("stav-formulare");
@@ -270,28 +330,16 @@ function naDatum(iso) {
 })();
 
 
-/* ---------- Kontakt na e-mail ----------
-   Odkaz zůstává obyčejný mailto, takže na telefonu i na počítači
-   s nastaveným poštovním programem se normálně otevře nová zpráva.
-   Když ale návštěvník žádný poštovní program nastavený nemá,
-   kliknutí by neudělalo nic — proto se adresa zároveň zkopíruje
-   do schránky a dá se rovnou vložit do webového Gmailu. */
+/* ---------- Tlačítko E-mail v kontaktech ----------
+   Nespoléhá se na to, že návštěvník má nastavený poštovní program.
+   Zkusí ho otevřít, a když se nic nestane, nabídne stejný panel
+   jako formulář. Kliknutí tak nikdy neskončí do prázdna. */
 (function () {
   const odkaz = document.querySelector('.kk[href^="mailto:"]');
   if (!odkaz) return;
 
-  const adresa = odkaz.getAttribute("href").replace("mailto:", "").split("?")[0];
-  const popisek = odkaz.querySelector(".kk-k");
-  if (!popisek) return;
-  const puvodni = popisek.textContent;
-  let cas = null;
-
-  odkaz.addEventListener("click", function () {
-    if (!navigator.clipboard) return;          // odkaz funguje dál i bez schránky
-    navigator.clipboard.writeText(adresa).then(function () {
-      popisek.textContent = "Adresa zkopírována";
-      clearTimeout(cas);
-      cas = setTimeout(() => { popisek.textContent = puvodni; }, 2500);
-    }).catch(() => {});
+  odkaz.addEventListener("click", function (e) {
+    e.preventDefault();
+    otevritPostu("Poptávka termínu", "");
   });
 })();

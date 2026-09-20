@@ -571,6 +571,25 @@
   <p class="lupa-popis" id="lupa-popis"></p>
 </div>
 
+
+<!-- Nabídka, jak mi napsat. Nespoléhá na to, že návštěvník má
+     v počítači nastavený poštovní program — vybere si sám. -->
+<div class="posta" id="posta" hidden>
+  <div class="posta-okno" role="dialog" aria-modal="true" aria-labelledby="posta-nadpis">
+    <button class="posta-zavrit" id="posta-zavrit" type="button" aria-label="Zavřít">&times;</button>
+    <h3 id="posta-nadpis">Kam vám mám zprávu připravit?</h3>
+    <p class="posta-text">Vyberte si, v čem píšete e-maily. Zpráva se otevře předvyplněná.</p>
+    <div class="posta-volby">
+      <a class="btn btn-hlavni" id="posta-gmail" href="#" target="_blank" rel="noopener">Gmail</a>
+      <a class="btn btn-vedlejsi" id="posta-outlook" href="#" target="_blank" rel="noopener">Outlook</a>
+      <a class="btn btn-vedlejsi" id="posta-seznam" href="#" target="_blank" rel="noopener">Seznam.cz</a>
+      <a class="btn btn-vedlejsi" id="posta-program" href="#">Poštovní program v počítači</a>
+      <button class="btn btn-vedlejsi" id="posta-kopirovat" type="button">Jen zkopírovat adresu</button>
+    </div>
+    <p class="posta-adresa">Nebo rovnou volejte: <a href="tel:+420704794222">+420 704 794 222</a></p>
+  </div>
+</div>
+
 </main>
 
 <footer class="pata">
