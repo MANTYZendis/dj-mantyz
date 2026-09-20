@@ -235,6 +235,10 @@ a{color:inherit}
   outline:none;border-color:var(--akcent);
 }
 .pole textarea{resize:vertical}
+.past{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-stav{margin:0;text-align:center;font-size:.93rem;font-weight:700}
+.form-stav:empty{display:none}
+.form-stav-chyba{color:#e88b7d}
 .form-pozn{margin:0;text-align:center;color:var(--text-3);font-size:.86rem}
 
 /* ---------- PŘÍMÝ KONTAKT ---------- */

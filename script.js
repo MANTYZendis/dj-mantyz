@@ -229,3 +229,84 @@ function mailtoOdkaz(predmet, telo) {
     otevritPostu("Poptávka termínu", "");
   });
 })();
+
+
+/* ---------- Odeslání poptávky ----------
+   Posílá se na api.djmantyz.cz — vlastní adresa, ne cizí služba.
+   Proto návštěvník po odeslání neskončí na cizí ověřovací stránce
+   a potvrzení mu přijde z djmantyz.cz, takže nespadne do spamu. */
+const ADRESA_ODESILANI = "https://api.djmantyz.cz";
+
+(function () {
+  const formular = document.getElementById("poptavka");
+  if (!formular) return;
+
+  const stav = document.getElementById("stav-formulare");
+  const tlacitko = formular.querySelector("button[type=submit]");
+
+  function hlaska(text) {
+    if (!stav) return;
+    stav.textContent = text;
+    stav.className = "form-stav form-stav-chyba";
+  }
+
+  formular.addEventListener("submit", function (udalost) {
+    udalost.preventDefault();
+
+    if (!formular.checkValidity()) {
+      formular.reportValidity();
+      return;
+    }
+
+    const hodnota = (id) => (document.getElementById(id)?.value || "").trim();
+    const data = {
+      web: hodnota("web"),            // past na roboty
+      jmeno: hodnota("jmeno"),
+      email: hodnota("email"),
+      telefon: hodnota("telefon"),
+      datum: naDatum(hodnota("datum")),
+      misto: hodnota("misto"),
+      typ: hodnota("typ"),
+      zprava: hodnota("zprava"),
+    };
+
+    if (stav) stav.textContent = "";
+    if (tlacitko) { tlacitko.disabled = true; tlacitko.textContent = "Odesílám…"; }
+
+    fetch(ADRESA_ODESILANI, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((odpoved) => odpoved.json().catch(() => ({})))
+      .then((vysledek) => {
+        if (!vysledek.ok) throw new Error(vysledek.chyba || "nepodařilo se odeslat");
+        window.location.href = "/dekuji";
+      })
+      .catch(function () {
+        hlaska("Odeslání se nepovedlo. Zkuste to prosím znovu, nebo mi napište přímo.");
+        if (tlacitko) { tlacitko.disabled = false; tlacitko.textContent = "Odeslat poptávku"; }
+        otevritPostu("Poptávka termínu", shrnutiProMail(data));
+      });
+  });
+
+  function shrnutiProMail(d) {
+    return [
+      `Jméno: ${d.jmeno}`,
+      `E-mail: ${d.email}`,
+      `Telefon: ${d.telefon || "neuveden"}`,
+      `Typ akce: ${d.typ}`,
+      `Datum: ${d.datum || "neuvedeno"}`,
+      `Místo: ${d.misto || "neuvedeno"}`,
+      "",
+      d.zprava || "(bez zprávy)",
+    ].join("\n");
+  }
+})();
+
+/* Z 2026-08-15 udělá 15. 8. 2026 */
+function naDatum(iso) {
+  if (!iso) return "";
+  const [r, m, d] = iso.split("-");
+  return `${Number(d)}. ${Number(m)}. ${r}`;
+}

@@ -1,0 +1,15 @@
+name = "djmantyz-poptavky"
+main = "index.js"
+compatibility_date = "2026-09-20"
+workers_dev = false
+
+# Vlastní adresa místo cizí workers.dev — Cloudflare si k ní DNS záznam
+# vytvoří sám. Hlavní web na djmantyz.cz to nijak neovlivní.
+routes = [
+  { pattern = "api.djmantyz.cz", custom_domain = true }
+]
+
+# Tajný klíč k Resendu se sem NEPÍŠE. Nastavuje se zvlášť:
+#   npx wrangler secret put RESEND_API_KEY
+# nebo v Cloudflare: Workers & Pages → djmantyz-poptavky
+#   → Settings → Variables and Secrets → Add (typ Secret)

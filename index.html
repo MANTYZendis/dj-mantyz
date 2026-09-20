@@ -493,18 +493,16 @@
         se dostanu později, takže když spěcháte, napište sem nebo rovnou zavolejte.
       </p>
 
-      <form class="form" action="https://formsubmit.co/mantyz.djwork@gmail.com" method="POST">
-        <!-- Nastavení pro FormSubmit. Záměrně BEZ _captcha=false a bez AJAXu —
-             při obojím se zákazníkovi nepošle potvrzení, že poptávka dorazila. -->
-        <input type="hidden" name="_subject" value="Poptávka z webu djmantyz.cz">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" value="https://djmantyz.cz/dekuji">
-        <input type="hidden" name="_autoresponse" value="Dobry den,&#10;&#10;vase poptavka mi dorazila, diky za ni. Ozvu se vam do 24 hodin s konkretni nabidkou.&#10;&#10;Tohle je automaticke potvrzeni, ze se formular opravdu odeslal - odpovidat na nej nemusite. Kdyby neco horelo, volejte rovnou na +420 704 794 222.&#10;&#10;Matej - DJ MANTYZ&#10;https://djmantyz.cz">
-        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+      <form class="form" id="poptavka" novalidate>
+        <!-- Past na roboty: schované políčko, které člověk nevyplní. -->
+        <div class="past" aria-hidden="true">
+          <label for="web">Nevyplňujte</label>
+          <input id="web" name="web" type="text" tabindex="-1" autocomplete="off">
+        </div>
 
         <div class="pole">
           <label for="jmeno">Jméno</label>
-          <input id="jmeno" name="Jméno" type="text" required autocomplete="name">
+          <input id="jmeno" name="jmeno" type="text" required autocomplete="name">
         </div>
         <div class="dvojice">
           <div class="pole">
@@ -514,23 +512,23 @@
           </div>
           <div class="pole">
             <label for="telefon">Telefon <span class="nepovinne">nepovinné</span></label>
-            <input id="telefon" name="Telefon" type="tel" autocomplete="tel"
+            <input id="telefon" name="telefon" type="tel" autocomplete="tel"
                    placeholder="ať se dá rychle zavolat">
           </div>
         </div>
         <div class="dvojice">
           <div class="pole">
             <label for="datum">Datum akce</label>
-            <input id="datum" name="Datum akce" type="date">
+            <input id="datum" name="datum" type="date">
           </div>
           <div class="pole">
             <label for="misto">Místo</label>
-            <input id="misto" name="Místo" type="text" placeholder="obec nebo sál">
+            <input id="misto" name="misto" type="text" placeholder="obec nebo sál">
           </div>
         </div>
         <div class="pole">
           <label for="typ">Typ akce</label>
-          <select id="typ" name="Typ akce">
+          <select id="typ" name="typ">
             <option>Svatba</option>
             <option>Oslava / narozeniny</option>
             <option>Firemní akce</option>
@@ -539,10 +537,11 @@
         </div>
         <div class="pole">
           <label for="zprava">Zpráva</label>
-          <textarea id="zprava" name="Zpráva" rows="4" placeholder="Počet hostů, od kolika do kolika, cokoliv dalšího…"></textarea>
+          <textarea id="zprava" name="zprava" rows="4" placeholder="Počet hostů, od kolika do kolika, cokoliv dalšího…"></textarea>
         </div>
 
         <button type="submit" class="btn btn-hlavni sirokytlacitko">Odeslat poptávku</button>
+        <p id="stav-formulare" class="form-stav" role="status"></p>
         <p class="form-pozn">
           Po odeslání vám na e-mail přijde potvrzení, že poptávka dorazila.
           Odpovídám do 24 hodin a údaje použiju jen na odpověď, nikam je nedávám dál.
