@@ -6,7 +6,7 @@
 /* --- KAM CHODÍ POPTÁVKY ---
    MUJ_EMAIL se používá jako záloha (otevře poštovní program)
    a taky u odkazu "E-mail" v index.html. */
-const MUJ_EMAIL = "mantyz.djwork@gmail.com";
+const MUJ_EMAIL = "info@djmantyz.cz";
 
 /* --- ODESÍLÁNÍ FORMULÁŘE BEZ POŠTOVNÍHO PROGRAMU ---
    Vlož sem přístupový klíč z web3forms.com (registrace e-mailem, zdarma,

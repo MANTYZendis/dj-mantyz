@@ -189,12 +189,15 @@ a{color:inherit}
 .primy-kontakt{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
 .kk{
   display:flex;flex-direction:column;gap:4px;text-decoration:none;
+  min-width:0;overflow:hidden;
   background:var(--panel);border:1px solid var(--linka);border-radius:var(--radius);
   padding:20px 22px;transition:border-color .2s,transform .12s;
 }
 .kk:hover{border-color:var(--akcent);transform:translateY(-2px)}
 .kk-k{font-size:.78rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3)}
-.kk-v{font-weight:700;color:var(--text)}
+.kk-v{font-weight:700;color:var(--text);
+  /* Dlouhy e-mail se nesmi vysypat z kartycky ven. */
+  min-width:0;overflow-wrap:anywhere;word-break:break-word}
 
 /* ---------- CENÍK ---------- */
 .cenik{
