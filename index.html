@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DJ MANTYZ — hudba a světla pro svatby a oslavy</title>
-<meta name="description" content="Mobilní DJ na svatby, oslavy a firemní akce. Vlastní ozvučení a DMX osvětlení. Nezávazná poptávka termínu.">
+<title>DJ MANTYZ — DJ na svatby a oslavy | Kladno a okolí</title>
+<meta name="description" content="Mobilní DJ na svatby, oslavy a firemní akce — Kladno, Praha a Středočeský kraj. Vlastní ozvučení i DMX osvětlení, ceny od 4 500 Kč. Nezávazná poptávka termínu.">
 
 <link rel="canonical" href="https://djmantyz.cz/">
 
 <!-- Otevřený graf pro sdílení na Facebooku / WhatsAppu -->
-<meta property="og:title" content="DJ MANTYZ — hudba a světla pro svatby a oslavy">
-<meta property="og:description" content="Mobilní DJ na svatby, oslavy a firemní akce. Vlastní ozvučení a DMX osvětlení.">
+<meta property="og:title" content="DJ MANTYZ — DJ na svatby a oslavy | Kladno a okolí">
+<meta property="og:description" content="Mobilní DJ na svatby, oslavy a firemní akce — Kladno, Praha a Středočeský kraj. Vlastní ozvučení i DMX osvětlení.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://djmantyz.cz/">
 <meta property="og:image" content="https://djmantyz.cz/obr/og.jpg">
@@ -26,6 +26,63 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;700;800&display=swap&subset=latin,latin-ext" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<!-- Strukturovaná data: strojový zápis toho, co je na stránce napsané lidsky.
+     Google z toho pozná, že jde o místní firmu, kde působí a za kolik. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "additionalType": "https://schema.org/MusicGroup",
+  "name": "DJ MANTYZ",
+  "description": "Mobilní DJ na svatby, oslavy a firemní akce. Vlastní ozvučení a DMX osvětlení.",
+  "url": "https://djmantyz.cz/",
+  "image": "https://djmantyz.cz/obr/og.jpg",
+  "telephone": "+420704794222",
+  "email": "dj.mantyz@gmail.com",
+  "priceRange": "od 4500 Kč",
+  "currenciesAccepted": "CZK",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Kladno",
+    "addressRegion": "Středočeský kraj",
+    "addressCountry": "CZ"
+  },
+  "areaServed": [
+    { "@type": "City", "name": "Kladno" },
+    { "@type": "City", "name": "Praha" },
+    { "@type": "AdministrativeArea", "name": "Středočeský kraj" }
+  ],
+  "sameAs": ["https://www.instagram.com/dj_mantyz/"],
+  "makesOffer": [
+    { "@type": "Offer", "name": "DJ na svatbu — večerní párty",
+      "priceSpecification": { "@type": "PriceSpecification", "minPrice": 7500, "priceCurrency": "CZK" } },
+    { "@type": "Offer", "name": "DJ na svatbu — celý den",
+      "priceSpecification": { "@type": "PriceSpecification", "minPrice": 10500, "priceCurrency": "CZK" } },
+    { "@type": "Offer", "name": "DJ na oslavu nebo narozeniny",
+      "priceSpecification": { "@type": "PriceSpecification", "minPrice": 4500, "priceCurrency": "CZK" } },
+    { "@type": "Offer", "name": "DJ na firemní akci",
+      "priceSpecification": { "@type": "PriceSpecification", "minPrice": 5500, "priceCurrency": "CZK" } }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Kam všude jezdíte?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Kladno a okolí do 30 kilometrů mám v ceně — to je i Praha, Slaný, Beroun nebo Rakovník. Dál se domluvíme, jen k ceně přibude doprava." } },
+    { "@type": "Question", "name": "Můžeme si určit, co se bude hrát?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Ano. Před akcí si projdeme, co chcete slyšet určitě, co se hrát nemá a na co bude první tanec. Zbytek vybírám podle toho, jak se sál chytá." } },
+    { "@type": "Question", "name": "Co potřebujete na místě?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Místo zhruba dva krát dva metry na pult a bedny a běžnou zásuvku 230 V blízko parketu. Na venkovní akci ještě zastřešení nebo stan." } },
+    { "@type": "Question", "name": "Hrajete i venku, na zahradě nebo ve stanu?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Ano. Aparát zvládne sál i zahradu, výkon nastavím podle prostoru a počtu hostů." } },
+    { "@type": "Question", "name": "Kdy si mám termín rezervovat?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Svatby se domlouvají klidně rok dopředu. Zkuste napsat i na poslední chvíli — termín může být volný." } }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -37,8 +94,10 @@
     </button>
     <nav class="nav">
       <a href="#sluzby">Co nabízím</a>
+      <a href="#cenik">Ceník</a>
       <a href="#technika">Technika</a>
       <a href="#galerie">Galerie</a>
+      <a href="#omne">O mně</a>
       <a href="#kontakt" class="nav-cta">Poptat termín</a>
     </nav>
   </div>
@@ -99,19 +158,82 @@
           <li>DMX osvětlení parketu a výroba mlhy</li>
           <li>Mikrofon pro proslovy</li>
           <li>Domluva playlistu předem — vaše přání i seznam zakázaného</li>
-          <li>Doprava<!-- doplň si okruh, např.: do 40 km od Kladna zdarma --></li>
+          <li>Doprava do 30 km od Kladna — Praha, Slaný, Beroun i Rakovník</li>
         </ul>
         <p class="pozn">
-          Cenu počítám podle délky akce, vzdálenosti a rozsahu techniky.
-          Napište mi termín a místo — ozvu se s konkrétní nabídkou do 24 hodin.
-          <!-- Až budeš znát své číslo, přidej sem: „Orientačně od ___ Kč." -->
+          Ceny začínají na 4 500 Kč — <a href="#cenik">celý ceník je hned níž</a>.
+          Konečnou cenu počítám podle délky akce, vzdálenosti a rozsahu techniky
+          a pošlu vám ji do 24 hodin od poptávky.
         </p>
       </div>
     </div>
   </section>
 
+
+  <!-- ============ CENÍK ============ -->
+  <section id="cenik" class="sekce sekce-tmava">
+    <div class="obal">
+      <p class="nadpisek">Ceník</p>
+      <h2>Kolik to stojí</h2>
+      <p class="uvod">
+        Žádné &bdquo;cena na dotaz&ldquo;. Tohle jsou ceny, se kterými počítám —
+        konečnou spočítám podle délky akce a vzdálenosti a pošlu ji do 24 hodin.
+      </p>
+
+      <div class="cenik">
+        <div class="polozka">
+          <span class="polozka-txt">
+            <span class="polozka-n">Oslava, narozeniny, sraz</span>
+            <span class="polozka-p">do 5 hodin hraní</span>
+          </span>
+          <span class="polozka-c">od 4 500 Kč</span>
+        </div>
+        <div class="polozka">
+          <span class="polozka-txt">
+            <span class="polozka-n">Firemní akce</span>
+            <span class="polozka-p">večírek nebo teambuilding, do 5 hodin</span>
+          </span>
+          <span class="polozka-c">od 5 500 Kč</span>
+        </div>
+        <div class="polozka">
+          <span class="polozka-txt">
+            <span class="polozka-n">Svatba — večerní párty</span>
+            <span class="polozka-p">od prvního tance do konce, do 8 hodin</span>
+          </span>
+          <span class="polozka-c">od 7 500 Kč</span>
+        </div>
+        <div class="polozka">
+          <span class="polozka-txt">
+            <span class="polozka-n">Svatba celý den</span>
+            <span class="polozka-p">obřad, hostina i večerní párty</span>
+          </span>
+          <span class="polozka-c">od 10 500 Kč</span>
+        </div>
+        <div class="polozka">
+          <span class="polozka-txt">
+            <span class="polozka-n">Každá další hodina</span>
+            <span class="polozka-p">když se tancuje dýl, než se čekalo</span>
+          </span>
+          <span class="polozka-c">800 Kč</span>
+        </div>
+        <div class="polozka">
+          <span class="polozka-txt">
+            <span class="polozka-n">Doprava do 30 km od Kladna</span>
+            <span class="polozka-p">dál po domluvě, 10 Kč za km navíc</span>
+          </span>
+          <span class="polozka-c">v ceně</span>
+        </div>
+      </div>
+
+      <p class="pozn">
+        V každé ceně je postavení i sklizení aparátu, ozvučení, DMX osvětlení parketu,
+        mlha, mikrofon na proslovy a domluva playlistu předem. Nic z toho není příplatek.
+      </p>
+    </div>
+  </section>
+
   <!-- ============ TECHNIKA ============ -->
-  <section id="technika" class="sekce sekce-tmava">
+  <section id="technika" class="sekce">
     <div class="obal">
       <p class="nadpisek">Technika</p>
       <h2>Vozím si vlastní aparát</h2>
@@ -146,7 +268,7 @@
   </section>
 
   <!-- ============ GALERIE ============ -->
-  <section id="galerie" class="sekce">
+  <section id="galerie" class="sekce sekce-tmava">
     <div class="obal">
       <p class="nadpisek">Galerie</p>
       <h2>Jak to u mě vypadá</h2>
@@ -168,8 +290,133 @@
     </div>
   </section>
 
+
+  <!-- ============ UKÁZKY (PŘIPRAVENO, ZATÍM SKRYTÉ) ============
+       Až budeš mít video z akce nebo mix, smaž značky komentáře kolem
+       celé sekce a doplň odkaz. U YouTube vezmi z adresy jen kód videa
+       a dej ho místo VIDEO_KOD.
+       Nezapomeň pak přidat odkaz do menu nahoře: a href="#ukazky" Ukázky
+
+  <section id="ukazky" class="sekce sekce-tmava">
+    <div class="obal">
+      <p class="nadpisek">Ukázky</p>
+      <h2>Jak to u mě zní</h2>
+      <p class="uvod">Kousek z akce — ať víte, do čeho jdete, ještě než se ozvete.</p>
+      <div class="video">
+        <iframe src="https://www.youtube-nocookie.com/embed/VIDEO_KOD"
+                title="Ukázka z akce — DJ MANTYZ"
+                loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+  ============================================================ -->
+
+  <!-- ============ O MNĚ ============ -->
+  <section id="omne" class="sekce">
+    <div class="obal">
+      <p class="nadpisek">O mně</p>
+      <h2>Kdo vám bude hrát</h2>
+
+      <div class="omne">
+        <div class="omne-txt">
+          <p>
+            Jmenuju se Matěj, jsem z Kladna a hraju pod jménem DJ MANTYZ.
+            Jezdím svatby, oslavy a firemní večírky po Kladensku, v Praze
+            a po Středočeském kraji.
+          </p>
+          <p>
+            Aparát si vozím vlastní, postavím ho i sklidím sám a celý večer
+            si u něj hlídám zvuk, světla i mlhu. Nemusíte shánět zvukaře,
+            osvětlovače a DJe zvlášť — domluvíte se na všechno se mnou.
+          </p>
+          <p>
+            Nehraju klubové sety. Na svatbě chcete slyšet svoji písničku celou,
+            ne osm taktů do dalšího přechodu — tak ji pustím celou a další vyberu
+            podle toho, kdo zrovna stojí na parketu. Kdo si přijde říct o skladbu,
+            tomu ji pustím.
+          </p>
+          <p>
+            Hudbu pouštím ve vysoké kvalitě z placené služby, ne staženou z YouTube.
+            Na velkém aparátu je ten rozdíl slyšet — a v sále ho pozná i ten,
+            kdo by o sobě řekl, že hudbě nerozumí.
+          </p>
+        </div>
+
+        <!--
+          FOTKA: až budeš mít svoji fotku, ulož ji jako obr/matej.jpg
+          (na výšku, šířka aspoň 800 px) a smaž značky komentáře kolem <figure>.
+        <figure class="omne-foto">
+          <img src="obr/matej.jpg" alt="Matěj — DJ MANTYZ za pultem na akci" loading="lazy">
+        </figure>
+        -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REFERENCE (PŘIPRAVENO, ZATÍM SKRYTÉ) ============
+       Až ti napíšou první dvě tři reakce, smaž značky komentáře kolem sekce
+       a přepiš texty i jména. Klidně jen křestní jméno a místo, třeba
+       Katka a Tom — svatba, Smečno 2026. Vymyšlené reference tam nedávej,
+       pozná se to.
+
+  <section id="reference" class="sekce">
+    <div class="obal">
+      <p class="nadpisek">Reference</p>
+      <h2>Co říkají lidi, u kterých jsem hrál</h2>
+      <div class="reference">
+        <figure class="ref">
+          <blockquote>Text reference.</blockquote>
+          <figcaption>Jméno — typ akce, místo, rok</figcaption>
+        </figure>
+        <figure class="ref">
+          <blockquote>Text reference.</blockquote>
+          <figcaption>Jméno — typ akce, místo, rok</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  ============================================================ -->
+
+  <!-- ============ ČASTÉ DOTAZY ============ -->
+  <section id="faq" class="sekce sekce-tmava">
+    <div class="obal obal-uzky">
+      <p class="nadpisek">Časté dotazy</p>
+      <h2>Na co se lidi ptají</h2>
+
+      <div class="faq">
+        <details>
+          <summary>Kam všude jezdíte?</summary>
+          <p>Kladno a okolí do 30 kilometrů mám v ceně — to je i Praha, Slaný,
+             Beroun nebo Rakovník. Dál se domluvíme, jen k ceně přibude doprava.</p>
+        </details>
+        <details>
+          <summary>Můžeme si určit, co se bude hrát?</summary>
+          <p>Nejen můžete, já o to stojím. Před akcí si projdeme, co chcete slyšet
+             určitě, co se hrát nemá v žádném případě a na co bude první tanec.
+             Zbytek vybírám podle toho, jak se sál chytá.</p>
+        </details>
+        <details>
+          <summary>Co potřebujete na místě?</summary>
+          <p>Místo zhruba dva krát dva metry na pult a bedny a běžnou zásuvku 230 V
+             blízko parketu. Na venkovní akci ještě zastřešení nebo stan — technika
+             nesmí zmoknout.</p>
+        </details>
+        <details>
+          <summary>Hrajete i venku, na zahradě nebo ve stanu?</summary>
+          <p>Hraju. Aparát zvládne sál i zahradu, výkon nastavím podle prostoru
+             a počtu hostů. Jen potřebuju vědět předem, ať vezmu správné bedny.</p>
+        </details>
+        <details>
+          <summary>Kdy si mám termín rezervovat?</summary>
+          <p>Svatby se domlouvají klidně rok dopředu, takže čím dřív, tím líp.
+             Ale zkuste napsat i na poslední chvíli — termín může být volný.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ KONTAKT ============ -->
-  <section id="kontakt" class="sekce sekce-tmava">
+  <section id="kontakt" class="sekce">
     <div class="obal obal-uzky">
       <p class="nadpisek">Kontakt</p>
       <h2>Máte termín? Napište mi.</h2>
@@ -179,9 +426,16 @@
       </p>
 
       <form class="form" onsubmit="odeslatPoptavku(event)">
-        <div class="pole">
-          <label for="jmeno">Jméno</label>
-          <input id="jmeno" name="jmeno" type="text" required autocomplete="name">
+        <div class="dvojice">
+          <div class="pole">
+            <label for="jmeno">Jméno</label>
+            <input id="jmeno" name="jmeno" type="text" required autocomplete="name">
+          </div>
+          <div class="pole">
+            <label for="email">E-mail nebo telefon</label>
+            <input id="email" name="email" type="text" required autocomplete="email"
+                   placeholder="kam se vám mám ozvat">
+          </div>
         </div>
         <div class="dvojice">
           <div class="pole">
@@ -206,8 +460,18 @@
           <label for="zprava">Zpráva</label>
           <textarea id="zprava" name="zprava" rows="4" placeholder="Počet hostů, od kolika do kolika, cokoliv dalšího…"></textarea>
         </div>
+        <!-- Past na roboty — schované políčko, člověk ho nevidí. -->
+        <div class="past" aria-hidden="true">
+          <label for="web">Nevyplňujte</label>
+          <input id="web" name="web" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
         <button type="submit" class="btn btn-hlavni sirokytlacitko">Odeslat poptávku</button>
-        <p class="form-pozn">Otevře se vám e-mail s předvyplněnou zprávou — jen ji odešlete.</p>
+        <p id="stav-formulare" class="form-stav" role="status"></p>
+        <p class="form-pozn">
+          Odpovídám do 24 hodin. Údaje použiju jen na odpověď na vaši poptávku,
+          nikam je nedávám dál.
+        </p>
       </form>
 
       <div class="primy-kontakt">

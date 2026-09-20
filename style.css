@@ -55,9 +55,9 @@ a{color:inherit}
 }
 .brand:hover{color:var(--akcent)}
 
-.nav{margin-left:auto;display:flex;align-items:center;gap:28px}
+.nav{margin-left:auto;display:flex;align-items:center;gap:22px}
 .nav a{
-  text-decoration:none;color:var(--text-2);font-weight:500;font-size:.97rem;
+  text-decoration:none;color:var(--text-2);font-weight:500;font-size:.93rem;
   transition:color .2s;
 }
 .nav a:hover{color:var(--text)}
@@ -192,6 +192,83 @@ a{color:inherit}
 .kk:hover{border-color:var(--akcent);transform:translateY(-2px)}
 .kk-k{font-size:.78rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3)}
 .kk-v{font-weight:700;color:var(--text)}
+
+/* ---------- CENÍK ---------- */
+.cenik{
+  display:flex;flex-direction:column;gap:1px;
+  background:var(--linka);border:1px solid var(--linka);
+  border-radius:var(--radius);overflow:hidden;margin:34px 0 0;
+}
+.polozka{
+  background:var(--panel);padding:20px 24px;
+  display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.polozka-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.polozka-n{font-weight:800}
+.polozka-p{color:var(--text-3);font-size:.9rem}
+.polozka-c{
+  font-family:'Anton',sans-serif;font-size:1.22rem;letter-spacing:.01em;
+  color:var(--akcent);white-space:nowrap;
+}
+.pozn a{color:var(--akcent)}
+
+/* ---------- O MNĚ ---------- */
+/* Dokud v sekci neni fotka, drzi text prijemnou sirku sam.
+   Jakmile se <figure class="omne-foto"> odkomentuje, prepne se to na dva sloupce. */
+.omne{display:grid;grid-template-columns:minmax(0,1fr);gap:38px;
+  align-items:start;margin-top:34px;max-width:62ch}
+.omne:has(.omne-foto){grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);max-width:none}
+.omne-txt p{margin:0 0 18px;color:var(--text-2)}
+.omne-txt p:last-child{margin-bottom:0}
+.omne-foto{
+  margin:0;border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--linka);background:var(--panel);
+}
+@media (max-width:820px){ .omne{grid-template-columns:1fr;gap:26px} }
+
+/* ---------- UKÁZKA VIDEA ---------- */
+.video{
+  position:relative;aspect-ratio:16/9;margin-top:34px;
+  border:1px solid var(--linka);border-radius:var(--radius);
+  overflow:hidden;background:var(--panel);
+}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+/* ---------- REFERENCE ---------- */
+.reference{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:34px}
+.ref{
+  margin:0;background:var(--panel);border:1px solid var(--linka);
+  border-left:3px solid var(--akcent);border-radius:var(--radius);padding:26px 24px;
+}
+.ref blockquote{margin:0 0 14px;color:var(--text-2);font-size:1.02rem}
+.ref figcaption{color:var(--text-3);font-size:.86rem;font-weight:700}
+
+/* ---------- ČASTÉ DOTAZY ---------- */
+.faq{display:flex;flex-direction:column;gap:12px;margin-top:34px}
+.faq details{
+  background:var(--panel);border:1px solid var(--linka);
+  border-radius:var(--radius);overflow:hidden;
+}
+.faq details[open]{border-color:var(--akcent-tmavy)}
+.faq summary{
+  list-style:none;cursor:pointer;padding:18px 22px;font-weight:700;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{
+  content:"+";color:var(--akcent);font-size:1.3rem;line-height:1;
+  font-weight:800;flex:none;
+}
+.faq details[open] summary::after{content:"\2013"}
+.faq summary:hover{color:var(--akcent)}
+.faq details p{margin:0;padding:0 22px 20px;color:var(--text-2);font-size:.97rem}
+
+/* ---------- FORMULÁŘ — stav odeslání a past na roboty ---------- */
+.past{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-stav{margin:0;text-align:center;font-size:.93rem;font-weight:700;min-height:0}
+.form-stav:empty{display:none}
+.form-stav-ok{color:var(--akcent)}
+.form-stav-chyba{color:#e88b7d}
 
 /* ---------- PATIČKA ---------- */
 .pata{padding:36px 0;border-top:1px solid var(--linka)}
