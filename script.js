@@ -9,14 +9,16 @@
 const MUJ_EMAIL = "info@djmantyz.cz";
 
 /* --- ODESÍLÁNÍ FORMULÁŘE BEZ POŠTOVNÍHO PROGRAMU ---
-   Vlož sem přístupový klíč z web3forms.com (registrace e-mailem, zdarma,
-   klíč ti přijde do mailu). Jakmile tu klíč je, formulář odesílá sám
-   a poptávka ti přijde na MUJ_EMAIL. Dokud je prázdný, funguje záloha přes mailto.
+   Klíč z web3forms.com (formulář "Poptavka djmantyz.cz"). Je to veřejný
+   klíč určený přímo do kódu stránky — nic tajného, nedá se jím zneužít
+   nic jiného než poslat zprávu na tvou adresu. Poptávky chodí na e-mail
+   účtu, na kterém je formulář založený (mantyz.djwork@gmail.com).
+   Kdyby byl prázdný, formulář se vrátí k otevírání poštovního programu.
 
    Záměrně to NENÍ funkce na Vercelu — tenhle způsob funguje stejně
    na Vercelu, na vlastním serveru i kdekoliv jinde. Při stěhování
    webu se nemusí měnit nic. */
-const WEB3FORMS_KLIC = "";
+const WEB3FORMS_KLIC = "2997e6ec-4225-4a4a-9292-17c54816e30f";
 
 
 /* ---------- Mobilní menu ---------- */
