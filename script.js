@@ -150,7 +150,51 @@ function naDatum(iso) {
     obrazek.src = f.currentSrc || f.src;
     obrazek.alt = f.alt || "";
     if (popis) popis.textContent = f.alt || "";
+    zrusPriblizeni();
   }
+
+  /* --- Přiblížení: druhé kliknutí fotku zvětší, další ji vrátí zpátky. --- */
+  function jePriblizeno() {
+    return obrazek.classList.contains("priblizeno");
+  }
+
+  function zrusPriblizeni() {
+    obrazek.classList.remove("priblizeno", "taham");
+    obrazek.style.transformOrigin = "center center";
+    lupa.classList.remove("zoom");
+  }
+
+  /* Spočítá, na které místo fotky uživatel ukázal (v procentech),
+     aby se přiblížilo přesně tam, a ne doprostřed. */
+  function nastavStred(x, y) {
+    const r = obrazek.getBoundingClientRect();
+    const px = Math.min(100, Math.max(0, ((x - r.left) / r.width) * 100));
+    const py = Math.min(100, Math.max(0, ((y - r.top) / r.height) * 100));
+    obrazek.style.transformOrigin = px + "% " + py + "%";
+  }
+
+  obrazek.addEventListener("click", function (e) {
+    e.stopPropagation();                 // ať klik na fotku nezavře prohlížeč
+    if (jePriblizeno()) { zrusPriblizeni(); return; }
+    nastavStred(e.clientX, e.clientY);
+    obrazek.classList.add("priblizeno");
+    lupa.classList.add("zoom");
+  });
+
+  // Při přiblížení se dá po fotce "jezdit" myší.
+  obrazek.addEventListener("mousemove", function (e) {
+    if (!jePriblizeno()) return;
+    obrazek.classList.add("taham");
+    nastavStred(e.clientX, e.clientY);
+  });
+  obrazek.addEventListener("mouseleave", () => obrazek.classList.remove("taham"));
+
+  // Na dotykovém displeji posouvá prst.
+  obrazek.addEventListener("touchmove", function (e) {
+    if (!jePriblizeno()) return;
+    obrazek.classList.add("taham");
+    nastavStred(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
 
   function otevri(index) {
     ukaz(index);
@@ -160,6 +204,7 @@ function naDatum(iso) {
   }
 
   function zavri() {
+    zrusPriblizeni();
     lupa.hidden = true;
     document.body.style.overflow = "";
     obrazek.src = "";
@@ -199,7 +244,7 @@ function naDatum(iso) {
   lupa.addEventListener("touchend", function (e) {
     if (zacatekX === null) return;
     const posun = e.changedTouches[0].clientX - zacatekX;
-    if (Math.abs(posun) > 50) ukaz(kde + (posun < 0 ? 1 : -1));
+    if (!jePriblizeno() && Math.abs(posun) > 50) ukaz(kde + (posun < 0 ? 1 : -1));
     zacatekX = null;
   }, { passive: true });
 })();

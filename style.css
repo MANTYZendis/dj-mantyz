@@ -182,9 +182,19 @@ a{color:inherit}
   max-width:min(1100px,92vw);max-height:84vh;
   width:auto;height:auto;border-radius:10px;
   box-shadow:0 24px 60px rgba(0,0,0,.6);
+  cursor:zoom-in;transition:transform .22s ease-out;
+  touch-action:none;
 }
+/* Priblizeni po dalsim kliknuti. Kam se klikne, tam se to priblizi —
+   transform-origin nastavuje skript podle pozice kurzoru nebo prstu. */
+.lupa-foto.priblizeno{cursor:zoom-out;transform:scale(2.2);transition:transform .22s ease-out}
+.lupa-foto.priblizeno.taham{transition:none}
+/* Pri priblizeni prekazi popisek i sipky — zmizi. */
+.lupa.zoom .lupa-popis,
+.lupa.zoom .lupa-sip{opacity:0;pointer-events:none}
 .lupa-popis{
   position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+  transition:opacity .2s;
   margin:0;max-width:min(760px,88vw);text-align:center;
   color:var(--text-2);font-size:.9rem;line-height:1.45;
 }
