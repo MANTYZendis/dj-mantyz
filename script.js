@@ -248,3 +248,30 @@ function naDatum(iso) {
     zacatekX = null;
   }, { passive: true });
 })();
+
+
+/* ---------- Kontakt na e-mail ----------
+   Odkaz zůstává obyčejný mailto, takže na telefonu i na počítači
+   s nastaveným poštovním programem se normálně otevře nová zpráva.
+   Když ale návštěvník žádný poštovní program nastavený nemá,
+   kliknutí by neudělalo nic — proto se adresa zároveň zkopíruje
+   do schránky a dá se rovnou vložit do webového Gmailu. */
+(function () {
+  const odkaz = document.querySelector('.kk[href^="mailto:"]');
+  if (!odkaz) return;
+
+  const adresa = odkaz.getAttribute("href").replace("mailto:", "").split("?")[0];
+  const popisek = odkaz.querySelector(".kk-k");
+  if (!popisek) return;
+  const puvodni = popisek.textContent;
+  let cas = null;
+
+  odkaz.addEventListener("click", function () {
+    if (!navigator.clipboard) return;          // odkaz funguje dál i bez schránky
+    navigator.clipboard.writeText(adresa).then(function () {
+      popisek.textContent = "Adresa zkopírována";
+      clearTimeout(cas);
+      cas = setTimeout(() => { popisek.textContent = puvodni; }, 2500);
+    }).catch(() => {});
+  });
+})();
