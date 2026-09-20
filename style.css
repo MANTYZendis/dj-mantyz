@@ -164,6 +164,9 @@ a{color:inherit}
 .foto{margin:0 0 14px;border-radius:var(--radius);overflow:hidden;background:var(--panel);
   border:1px solid var(--linka);break-inside:avoid}
 .foto img{display:block;width:100%;height:auto;transition:transform .4s}
+/* Mensi zaber — pro fotky, ktere maji slabsi kvalitu nez zbytek galerie. */
+.foto-mala{width:74%;margin-left:auto}
+@media (max-width:560px){ .foto-mala{width:100%} }
 .foto:hover img{transform:scale(1.04)}
 
 /* ---------- FORMULÁŘ ---------- */
