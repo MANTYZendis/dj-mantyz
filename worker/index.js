@@ -77,13 +77,32 @@ export default {
       zprava || "(bez zprávy)",
     ].join("\n");
 
+    // Poptávku si nejdřív uložíme. I kdyby pak selhalo odesílání mailu,
+    // nesmí se ztratit — bez toho by zákazník napsal a nikdo by to nevěděl.
+    let cislo = null;
+    try {
+      const zapis = await env.DB.prepare(
+        `INSERT INTO poptavky (prijato, jmeno, email, telefon, typ, datum_akce, misto, zprava, ip_zeme)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      ).bind(
+        new Date().toISOString(),
+        jmeno, email, telefon || null, typ,
+        datum || null, misto || null, zprava || null,
+        request.headers.get("CF-IPCountry") || null
+      ).run();
+      cislo = zapis.meta?.last_row_id ?? null;
+    } catch (e) {
+      // Uložení selhalo — poptávku pošleme aspoň mailem a chybu si poznamenáme.
+      console.error("Zápis do databáze selhal:", e);
+    }
+
     try {
       // 1) poptávka Matějovi — odpověď půjde rovnou zákazníkovi
       await posliMail(env, {
         from: ODESILATEL,
         to: [KAM_CHODI_POPTAVKY],
         reply_to: [email],
-        subject: `Poptávka: ${typ}${datum ? " — " + datum : ""}`,
+        subject: `Poptávka${cislo ? " č. " + cislo : ""}: ${typ}${datum ? " — " + datum : ""}`,
         text: shrnuti,
       });
 

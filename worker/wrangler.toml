@@ -9,6 +9,12 @@ routes = [
   { pattern = "api.djmantyz.cz", custom_domain = true }
 ]
 
+# Databáze poptávek — aby šly zobrazit v aplikaci, ne jen v mailu.
+[[d1_databases]]
+binding = "DB"
+database_name = "djmantyz-poptavky"
+database_id = "9b830ebf-c1d4-4121-b840-9fb73f7aa4ef"
+
 # Tajný klíč k Resendu se sem NEPÍŠE. Nastavuje se zvlášť:
 #   npx wrangler secret put RESEND_API_KEY
 # nebo v Cloudflare: Workers & Pages → djmantyz-poptavky
