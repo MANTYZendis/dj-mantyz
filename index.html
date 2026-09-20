@@ -494,15 +494,20 @@
       </p>
 
       <form class="form" onsubmit="odeslatPoptavku(event)">
+        <div class="pole">
+          <label for="jmeno">Jméno</label>
+          <input id="jmeno" name="jmeno" type="text" required autocomplete="name">
+        </div>
         <div class="dvojice">
           <div class="pole">
-            <label for="jmeno">Jméno</label>
-            <input id="jmeno" name="jmeno" type="text" required autocomplete="name">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" required autocomplete="email"
+                   placeholder="potvrzení pošlu sem">
           </div>
           <div class="pole">
-            <label for="email">E-mail nebo telefon</label>
-            <input id="email" name="email" type="text" required autocomplete="email"
-                   placeholder="kam se vám mám ozvat">
+            <label for="telefon">Telefon <span class="nepovinne">nepovinné</span></label>
+            <input id="telefon" name="telefon" type="tel" autocomplete="tel"
+                   placeholder="ať se dá rychle zavolat">
           </div>
         </div>
         <div class="dvojice">
@@ -537,8 +542,8 @@
         <button type="submit" class="btn btn-hlavni sirokytlacitko">Odeslat poptávku</button>
         <p id="stav-formulare" class="form-stav" role="status"></p>
         <p class="form-pozn">
-          Na poptávku z formuláře odpovídám do 24 hodin. Údaje použiju jen
-          na odpověď, nikam je nedávám dál.
+          Na e-mail vám hned přijde potvrzení, že poptávka dorazila.
+          Odpovídám do 24 hodin a údaje použiju jen na odpověď, nikam je nedávám dál.
         </p>
       </form>
 

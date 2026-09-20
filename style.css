@@ -225,6 +225,7 @@ a{color:inherit}
 .dvojice{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .pole{display:flex;flex-direction:column;gap:7px}
 .pole label{font-size:.88rem;font-weight:700;color:var(--text-2)}
+.nepovinne{font-weight:500;color:var(--text-3);text-transform:none;letter-spacing:0}
 .pole input,.pole select,.pole textarea{
   font-family:inherit;font-size:1rem;color:var(--text);
   background:var(--noc);border:1px solid var(--linka);border-radius:10px;

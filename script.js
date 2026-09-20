@@ -8,17 +8,20 @@
    a taky u odkazu "E-mail" v index.html. */
 const MUJ_EMAIL = "info@djmantyz.cz";
 
-/* --- ODESÍLÁNÍ FORMULÁŘE BEZ POŠTOVNÍHO PROGRAMU ---
-   Klíč z web3forms.com (formulář "Poptavka djmantyz.cz"). Je to veřejný
-   klíč určený přímo do kódu stránky — nic tajného, nedá se jím zneužít
-   nic jiného než poslat zprávu na tvou adresu. Poptávky chodí na e-mail
-   účtu, na kterém je formulář založený (mantyz.djwork@gmail.com).
-   Kdyby byl prázdný, formulář se vrátí k otevírání poštovního programu.
+/* --- ODESÍLÁNÍ FORMULÁŘE ---
+   Poptávka jde přes FormSubmit. Proti Web3Forms umí zdarma poslat
+   zákazníkovi potvrzení, že jeho zpráva dorazila — a o to nám jde:
+   kdo vyplní formulář a nedostane nic, neví, jestli se to vůbec odeslalo.
 
-   Záměrně to NENÍ funkce na Vercelu — tenhle způsob funguje stejně
-   na Vercelu, na vlastním serveru i kdekoliv jinde. Při stěhování
-   webu se nemusí měnit nic. */
-const WEB3FORMS_KLIC = "2997e6ec-4225-4a4a-9292-17c54816e30f";
+   POZOR — jednorázová aktivace: po úplně prvním odeslání přijde na
+   KAM_CHODI_POPTAVKY e-mail od FormSubmit s odkazem, na který je potřeba
+   kliknout. Do té doby se poptávky nedoručují. Po aktivaci FormSubmit
+   nabídne náhradní řetězec místo adresy — až ho budeš mít, přepiš ho sem
+   místo e-mailu, ať adresa nesvítí přímo v kódu stránky.
+
+   Nezávislé na hostingu: je to obyčejné volání ze stránky, takže po
+   stěhování webu na vlastní server se nemusí měnit nic. */
+const KAM_CHODI_POPTAVKY = "mantyz.djwork@gmail.com";
 
 
 /* ---------- Mobilní menu ---------- */
@@ -58,13 +61,15 @@ function odeslatPoptavku(udalost) {
   const misto  = hodnota("misto");
   const typ    = hodnota("typ");
   const email  = hodnota("email");
+  const telefon = hodnota("telefon");
   const zprava = hodnota("zprava");
 
   const predmet = `Poptávka: ${typ}${datum ? " — " + naDatum(datum) : ""}`;
 
   const telo = [
     `Jméno: ${jmeno}`,
-    `Kontakt: ${email || "neuveden"}`,
+    `E-mail: ${email || "neuveden"}`,
+    `Telefon: ${telefon || "neuveden"}`,
     `Typ akce: ${typ}`,
     `Datum: ${datum ? naDatum(datum) : "neuvedeno"}`,
     `Místo: ${misto || "neuvedeno"}`,
@@ -72,33 +77,48 @@ function odeslatPoptavku(udalost) {
     zprava || "(bez zprávy)",
   ].join("\n");
 
-  if (WEB3FORMS_KLIC) {
+  if (KAM_CHODI_POPTAVKY) {
     odeslatNaServer(predmet, telo, jmeno, email);
   } else {
     otevritPostu(predmet, telo);
   }
 }
 
-/* Odešle poptávku na pozadí — návštěvník nemusí mít nastavený e-mail. */
+/* Odešle poptávku na pozadí — návštěvník nemusí mít nastavený e-mail.
+   Zároveň si o odeslání řekne zákazníkovi do jeho schránky. */
 function odeslatNaServer(predmet, telo, jmeno, email) {
   const tlacitko = document.querySelector(".form button[type=submit]");
   if (tlacitko) { tlacitko.disabled = true; tlacitko.textContent = "Odesílám…"; }
 
-  fetch("https://api.web3forms.com/submit", {
+  const potvrzeni =
+    "Dobrý den,\n\n" +
+    "vaše poptávka mi dorazila, díky za ni. Ozvu se vám do 24 hodin " +
+    "s konkrétní nabídkou.\n\n" +
+    "Tohle je automatické potvrzení, že se formulář opravdu odeslal — " +
+    "odpovídat na něj nemusíte. Kdyby něco hořelo, volejte rovnou " +
+    "na +420 704 794 222.\n\n" +
+    "Co jsem od vás dostal:\n" + telo + "\n\n" +
+    "Matěj — DJ MANTYZ\n" +
+    "https://djmantyz.cz";
+
+  fetch("https://formsubmit.co/ajax/" + encodeURIComponent(KAM_CHODI_POPTAVKY), {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({
-      access_key: WEB3FORMS_KLIC,
-      subject: predmet,
-      from_name: jmeno || "Poptávka z webu",
-      replyto: email || undefined,
+      _subject: predmet,
+      _captcha: "false",
+      _template: "table",
+      _autoresponse: potvrzeni,     // tohle dostane zákazník do své schránky
+      name: jmeno || "Poptávka z webu",
+      email: email,                 // adresa, na kterou jde potvrzení
       message: telo,
     }),
   })
     .then((odpoved) => odpoved.json())
     .then((data) => {
-      if (!data.success) throw new Error(data.message || "nepodařilo se odeslat");
-      hlaska("Poptávka odešla. Ozvu se do 24 hodin.", "ok");
+      const ok = data.success === true || data.success === "true";
+      if (!ok) throw new Error(data.message || "nepodařilo se odeslat");
+      hlaska("Poptávka odešla. Potvrzení máte v e-mailu, ozvu se do 24 hodin.", "ok");
       document.querySelector(".form")?.reset();
       if (tlacitko) tlacitko.textContent = "Odesláno";
     })
