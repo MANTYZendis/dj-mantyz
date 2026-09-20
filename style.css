@@ -212,6 +212,13 @@ a{color:inherit}
 }
 .pozn a{color:var(--akcent)}
 
+/* Na uzkem displeji vzdy cena na vlastnim radku — jinak u jedne polozky
+   zustane vedle nazvu a u druhe spadne pod nej a vypada to neuklizene. */
+@media (max-width:620px){
+  .polozka{flex-direction:column;align-items:flex-start;gap:5px}
+  .polozka-c{font-size:1.1rem}
+}
+
 /* ---------- O MNĚ ---------- */
 /* Dokud v sekci neni fotka, drzi text prijemnou sirku sam.
    Jakmile se <figure class="omne-foto"> odkomentuje, prepne se to na dva sloupce. */
@@ -285,6 +292,8 @@ a{color:inherit}
     margin-left:0;padding-top:10px;
   }
   .otevreno .nav{display:flex}
+  /* Otevrene menu musi byt neprusvitne, jinak jim prosvita hero pod nim. */
+  .hdr-in.otevreno{background:var(--noc);border-radius:0 0 12px 12px}
   .nav a{width:100%;padding:11px 2px}
   .nav .nav-cta{text-align:center;margin-top:8px}
   .dvojice{grid-template-columns:1fr}
