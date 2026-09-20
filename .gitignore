@@ -5,3 +5,7 @@ _work/
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Pracovní cache wranglera (obsahuje ID účtu, do repozitáře nepatří)
+worker/.wrangler/
+node_modules/
