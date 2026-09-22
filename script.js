@@ -105,7 +105,8 @@ function mailtoOdkaz(predmet, telo) {
   const lupa = document.getElementById("lupa");
   const obrazek = document.getElementById("lupa-foto");
   const popis = document.getElementById("lupa-popis");
-  const fotky = Array.from(document.querySelectorAll(".galerie .foto img"));
+  // Kromě galerie i portrét v sekci O mně — ať se chová stejně.
+  const fotky = Array.from(document.querySelectorAll(".galerie .foto img, .omne-foto img"));
   if (!lupa || !obrazek || !fotky.length) return;
 
   let kde = 0;
@@ -177,7 +178,7 @@ function mailtoOdkaz(predmet, telo) {
   }
 
   fotky.forEach(function (f, i) {
-    const ramecek = f.closest(".foto");
+    const ramecek = f.closest(".foto, .omne-foto");
     if (!ramecek) return;
     ramecek.tabIndex = 0;
     ramecek.setAttribute("role", "button");

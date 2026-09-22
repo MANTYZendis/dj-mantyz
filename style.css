@@ -164,8 +164,12 @@ a{color:inherit}
 .foto{margin:0 0 14px;border-radius:var(--radius);overflow:hidden;background:var(--panel);
   border:1px solid var(--linka);break-inside:avoid}
 .foto img{display:block;width:100%;height:auto;transition:transform .4s}
-.foto{cursor:zoom-in}
-.foto img{pointer-events:none}
+.foto,
+.omne-foto{cursor:zoom-in}
+.foto img,
+.omne-foto img{pointer-events:none}
+.omne-foto img{transition:transform .4s}
+.omne-foto:hover img{transform:scale(1.04)}
 .foto:hover img{transform:scale(1.04)}
 
 /* ---------- PROHLÍŽEČ FOTEK ---------- */
