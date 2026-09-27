@@ -120,7 +120,7 @@ export default {
           `odpovídat na něj nemusíte. Kdyby něco spěchalo, volejte rovnou ` +
           `na ${TELEFON}.\n\n` +
           `Co jsem od vás dostal:\n${shrnuti}\n\n` +
-          `Matěj — DJ MANTYZ\nhttps://djmantyz.cz`,
+          `Matěj Endrle — DJ MANTYZ\n${TELEFON}\nhttps://djmantyz.cz`,
       });
 
       return odpoved({ ok: true }, 200, hlavicky);
