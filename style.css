@@ -271,6 +271,9 @@ a{color:inherit}
   background:var(--panel);padding:20px 24px;
   display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;
 }
+.polozka-skupina{background:var(--noc-2);padding:14px 24px 10px;
+  font-size:.76rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--akcent)}
 .polozka-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
 .polozka-n{font-weight:800}
 .polozka-p{color:var(--text-3);font-size:.9rem}
