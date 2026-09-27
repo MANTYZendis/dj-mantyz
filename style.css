@@ -316,6 +316,7 @@ a{color:inherit}
   border-left:3px solid var(--akcent);border-radius:var(--radius);padding:26px 24px;
 }
 .ref blockquote{margin:0 0 14px;color:var(--text-2);font-size:1.02rem}
+.ref cite{font-style:normal;color:var(--text-2)}
 .ref figcaption{color:var(--text-3);font-size:.86rem;font-weight:700}
 
 /* ---------- ČASTÉ DOTAZY ---------- */
