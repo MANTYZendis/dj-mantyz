@@ -98,70 +98,169 @@ function mailtoOdkaz(predmet, telo) {
 })();
 
 /* ---------- Prohlížeč fotek ----------
-   Kliknutí na fotku v galerii ji otevře přes celou obrazovku.
-   Zavírá se křížkem, klávesou Esc nebo kliknutím vedle fotky,
-   přepíná se šipkami, tlačítky nebo švihnutím prstem. */
+   Kliknutí na fotku ji otevře přes celou obrazovku. Přibližuje se jako
+   ve Fotkách v telefonu nebo ve Windows:
+     - kolečko myši / dva prsty  = plynulé přiblížení kolem kurzoru či prstů
+     - tažení myší / prstem      = posun přiblížené fotky
+     - dvojklik / dvojí klepnutí = přiblížit, podruhé vrátit zpátky
+   Zavírá se křížkem, klávesou Esc nebo kliknutím vedle fotky, přepíná se
+   šipkami, tlačítky nebo švihnutím prstem (když fotka není přiblížená). */
 (function () {
   const lupa = document.getElementById("lupa");
   const obrazek = document.getElementById("lupa-foto");
   const popis = document.getElementById("lupa-popis");
-  // Kromě galerie i portrét v sekci O mně — ať se chová stejně.
+  // Kromě galerie i portrét v sekci O mně a fotka u ozvučení akcí.
   const fotky = Array.from(document.querySelectorAll(".galerie .foto img, .omne-foto img, .ozv-foto img"));
   if (!lupa || !obrazek || !fotky.length) return;
 
+  obrazek.draggable = false;
+
+  const MAX = 5;               // nejvíc pětinásobné přiblížení
   let kde = 0;
+  let s = 1, tx = 0, ty = 0;   // přiblížení a posun
+  let zaklad = null;           // kde fotka leží, když není přiblížená
+
+  function zmerZaklad() {
+    const t = obrazek.style.transform;
+    obrazek.style.transform = "none";
+    zaklad = obrazek.getBoundingClientRect();
+    obrazek.style.transform = t;
+  }
+
+  function vykresli(plynule) {
+    obrazek.classList.toggle("plynule", !!plynule);
+    obrazek.style.transform = s > 1 ? `translate(${tx}px, ${ty}px) scale(${s})` : "";
+    lupa.classList.toggle("zoom", s > 1);
+  }
+
+  // Přiblížená fotka nesmí ujet z obrazovky; menší než obrazovka zůstane uprostřed.
+  function ohranic() {
+    if (s <= 1 || !zaklad) { s = 1; tx = 0; ty = 0; return; }
+    const vw = lupa.clientWidth, vh = lupa.clientHeight;
+    const w = zaklad.width * s, h = zaklad.height * s;
+    tx = w <= vw ? (vw - w) / 2 - zaklad.left
+                 : Math.min(-zaklad.left, Math.max(vw - w - zaklad.left, tx));
+    ty = h <= vh ? (vh - h) / 2 - zaklad.top
+                 : Math.min(-zaklad.top, Math.max(vh - h - zaklad.top, ty));
+  }
+
+  // Přiblíží tak, aby bod pod kurzorem (prstem) zůstal na místě.
+  function priblizKolem(noveS, x, y, plynule) {
+    if (!zaklad) zmerZaklad();
+    noveS = Math.min(MAX, Math.max(1, noveS));
+    const u = (x - zaklad.left - tx) / s;
+    const v = (y - zaklad.top - ty) / s;
+    s = noveS;
+    tx = x - zaklad.left - s * u;
+    ty = y - zaklad.top - s * v;
+    ohranic();
+    vykresli(plynule);
+  }
+
+  function zrusPriblizeni(plynule) {
+    s = 1; tx = 0; ty = 0;
+    vykresli(plynule);
+  }
 
   function ukaz(index) {
     kde = (index + fotky.length) % fotky.length;
     const f = fotky[kde];
+    zrusPriblizeni(false);
+    zaklad = null;
     obrazek.src = f.currentSrc || f.src;
     obrazek.alt = f.alt || "";
     if (popis) popis.textContent = f.alt || "";
-    zrusPriblizeni();
   }
 
-  /* --- Přiblížení: druhé kliknutí fotku zvětší, další ji vrátí zpátky. --- */
-  function jePriblizeno() {
-    return obrazek.classList.contains("priblizeno");
-  }
-
-  function zrusPriblizeni() {
-    obrazek.classList.remove("priblizeno", "taham");
-    obrazek.style.transformOrigin = "center center";
-    lupa.classList.remove("zoom");
-  }
-
-  /* Spočítá, na které místo fotky uživatel ukázal (v procentech),
-     aby se přiblížilo přesně tam, a ne doprostřed. */
-  function nastavStred(x, y) {
-    const r = obrazek.getBoundingClientRect();
-    const px = Math.min(100, Math.max(0, ((x - r.left) / r.width) * 100));
-    const py = Math.min(100, Math.max(0, ((y - r.top) / r.height) * 100));
-    obrazek.style.transformOrigin = px + "% " + py + "%";
-  }
-
-  obrazek.addEventListener("click", function (e) {
-    e.stopPropagation();                 // ať klik na fotku nezavře prohlížeč
-    if (jePriblizeno()) { zrusPriblizeni(); return; }
-    nastavStred(e.clientX, e.clientY);
-    obrazek.classList.add("priblizeno");
-    lupa.classList.add("zoom");
+  obrazek.addEventListener("load", () => { if (s === 1) zmerZaklad(); });
+  window.addEventListener("resize", function () {
+    if (lupa.hidden) return;
+    zrusPriblizeni(false);
+    zmerZaklad();
   });
 
-  // Při přiblížení se dá po fotce "jezdit" myší.
-  obrazek.addEventListener("mousemove", function (e) {
-    if (!jePriblizeno()) return;
-    obrazek.classList.add("taham");
-    nastavStred(e.clientX, e.clientY);
-  });
-  obrazek.addEventListener("mouseleave", () => obrazek.classList.remove("taham"));
+  // Kolečko myši (a gesto dvěma prsty na touchpadu).
+  lupa.addEventListener("wheel", function (e) {
+    if (lupa.hidden) return;
+    e.preventDefault();
+    priblizKolem(s * Math.exp(-e.deltaY * 0.0015), e.clientX, e.clientY, false);
+  }, { passive: false });
 
-  // Na dotykovém displeji posouvá prst.
-  obrazek.addEventListener("touchmove", function (e) {
-    if (!jePriblizeno()) return;
-    obrazek.classList.add("taham");
-    nastavStred(e.touches[0].clientX, e.touches[0].clientY);
-  }, { passive: true });
+  // Myš i prsty přes jednotné "pointer" události.
+  const prsty = new Map();
+  let gesto = null;
+  let tahlo = false;                       // bylo to tažení, ne klepnutí
+  let posledniKlep = { cas: 0, x: 0, y: 0 };
+
+  function stredDvou() {
+    const [a, b] = [...prsty.values()];
+    return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, d: Math.hypot(a.x - b.x, a.y - b.y) };
+  }
+
+  obrazek.addEventListener("pointerdown", function (e) {
+    try { obrazek.setPointerCapture(e.pointerId); } catch (_) { /* ukazatel uz zmizel */ }
+    prsty.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (!zaklad) zmerZaklad();
+    if (prsty.size === 1) {
+      tahlo = false;
+      gesto = { typ: "posun", x: e.clientX, y: e.clientY, tx0: tx, ty0: ty };
+    } else if (prsty.size === 2) {
+      const m = stredDvou();
+      gesto = { typ: "stisk", d0: m.d || 1, s0: s,
+                u: (m.x - zaklad.left - tx) / s, v: (m.y - zaklad.top - ty) / s };
+      tahlo = true;
+    }
+  });
+
+  obrazek.addEventListener("pointermove", function (e) {
+    if (!prsty.has(e.pointerId) || !gesto) return;
+    prsty.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (gesto.typ === "stisk" && prsty.size >= 2) {
+      const m = stredDvou();
+      s = Math.min(MAX, Math.max(1, gesto.s0 * m.d / gesto.d0));
+      tx = m.x - zaklad.left - s * gesto.u;
+      ty = m.y - zaklad.top - s * gesto.v;
+      ohranic(); vykresli(false);
+    } else if (gesto.typ === "posun") {
+      const dx = e.clientX - gesto.x, dy = e.clientY - gesto.y;
+      if (Math.abs(dx) + Math.abs(dy) > 6) tahlo = true;
+      if (s > 1) {
+        tx = gesto.tx0 + dx; ty = gesto.ty0 + dy;
+        ohranic(); vykresli(false);
+      }
+    }
+  });
+
+  function pustil(e) {
+    prsty.delete(e.pointerId);
+    if (prsty.size === 1) {            // ze dvou prstů zbyl jeden → posouvá dál
+      const p = [...prsty.values()][0];
+      gesto = { typ: "posun", x: p.x, y: p.y, tx0: tx, ty0: ty };
+    } else if (prsty.size === 0) {
+      gesto = null;
+    }
+  }
+
+  obrazek.addEventListener("pointerup", function (e) {
+    if (!prsty.has(e.pointerId)) return;
+    const posledni = prsty.size === 1;
+    pustil(e);
+    if (!posledni || tahlo) return;
+    // Dvojklik / dvojí klepnutí.
+    const ted = Date.now();
+    const blizko = Math.hypot(e.clientX - posledniKlep.x, e.clientY - posledniKlep.y) < 30;
+    if (ted - posledniKlep.cas < 320 && blizko) {
+      if (s > 1) zrusPriblizeni(true);
+      else priblizKolem(2.5, e.clientX, e.clientY, true);
+      posledniKlep.cas = 0;
+    } else {
+      posledniKlep = { cas: ted, x: e.clientX, y: e.clientY };
+    }
+  });
+  obrazek.addEventListener("pointercancel", pustil);
+
+  // Kliknutí na fotku prohlížeč nezavírá.
+  obrazek.addEventListener("click", (e) => e.stopPropagation());
 
   function otevri(index) {
     ukaz(index);
@@ -171,10 +270,11 @@ function mailtoOdkaz(predmet, telo) {
   }
 
   function zavri() {
-    zrusPriblizeni();
+    zrusPriblizeni(false);
     lupa.hidden = true;
     document.body.style.overflow = "";
     obrazek.src = "";
+    zaklad = null;
   }
 
   fotky.forEach(function (f, i) {
@@ -200,18 +300,24 @@ function mailtoOdkaz(predmet, telo) {
 
   document.addEventListener("keydown", function (e) {
     if (lupa.hidden) return;
+    const stredX = lupa.clientWidth / 2, stredY = lupa.clientHeight / 2;
     if (e.key === "Escape") zavri();
-    if (e.key === "ArrowLeft") ukaz(kde - 1);
-    if (e.key === "ArrowRight") ukaz(kde + 1);
+    else if (e.key === "ArrowLeft") ukaz(kde - 1);
+    else if (e.key === "ArrowRight") ukaz(kde + 1);
+    else if (e.key === "+" || e.key === "=") priblizKolem(s * 1.5, stredX, stredY, true);
+    else if (e.key === "-") priblizKolem(s / 1.5, stredX, stredY, true);
+    else if (e.key === "0") zrusPriblizeni(true);
   });
 
-  // Švihnutí prstem na mobilu.
+  // Švihnutí jedním prstem přepíná fotky — jen když není přiblížená.
   let zacatekX = null;
-  lupa.addEventListener("touchstart", (e) => { zacatekX = e.changedTouches[0].clientX; }, { passive: true });
+  lupa.addEventListener("touchstart", function (e) {
+    zacatekX = e.touches.length === 1 ? e.touches[0].clientX : null;
+  }, { passive: true });
   lupa.addEventListener("touchend", function (e) {
-    if (zacatekX === null) return;
+    if (zacatekX === null || s > 1 || e.touches.length) { zacatekX = null; return; }
     const posun = e.changedTouches[0].clientX - zacatekX;
-    if (!jePriblizeno() && Math.abs(posun) > 50) ukaz(kde + (posun < 0 ? 1 : -1));
+    if (Math.abs(posun) > 50) ukaz(kde + (posun < 0 ? 1 : -1));
     zacatekX = null;
   }, { passive: true });
 })();

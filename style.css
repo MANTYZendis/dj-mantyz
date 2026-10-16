@@ -182,17 +182,19 @@ a{color:inherit}
   animation:lupa-nabeh .18s ease-out;
 }
 @keyframes lupa-nabeh{from{opacity:0}to{opacity:1}}
+.lupa{touch-action:none}   /* gesta dvema prsty resi skript, ne prohlizec */
 .lupa-foto{
   max-width:min(1100px,92vw);max-height:84vh;
   width:auto;height:auto;border-radius:10px;
   box-shadow:0 24px 60px rgba(0,0,0,.6);
-  cursor:zoom-in;transition:transform .22s ease-out;
-  touch-action:none;
+  transform-origin:0 0;touch-action:none;
+  user-select:none;-webkit-user-drag:none;
 }
-/* Priblizeni po dalsim kliknuti. Kam se klikne, tam se to priblizi —
-   transform-origin nastavuje skript podle pozice kurzoru nebo prstu. */
-.lupa-foto.priblizeno{cursor:zoom-out;transform:scale(2.2);transition:transform .22s ease-out}
-.lupa-foto.priblizeno.taham{transition:none}
+/* Priblizeni jako ve Fotkach: kolecko / dva prsty / dvojklik.
+   Plynuly prechod jen u dvojkliku, pri tahani a kolecku by brzdil. */
+.lupa-foto.plynule{transition:transform .22s ease-out}
+.lupa.zoom .lupa-foto{cursor:grab}
+.lupa.zoom .lupa-foto:active{cursor:grabbing}
 /* Pri priblizeni prekazi popisek i sipky — zmizi. */
 .lupa.zoom .lupa-popis,
 .lupa.zoom .lupa-sip{opacity:0;pointer-events:none}
